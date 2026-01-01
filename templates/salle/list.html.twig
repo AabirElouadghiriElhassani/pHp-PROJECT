@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+{% block title %}Salles{% endblock %}
+
+{% block body %}
+<h1>Liste des salles</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Capacité</th>
+            <th>Équipements</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for salle in salles %}
+            <tr>
+                <td>{{ salle.nom }}</td>
+                <td>{{ salle.capacite }}</td>
+                <td>{{ salle.equipemnts ?? salle.equipements }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

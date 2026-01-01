@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau de bord admin{% endblock %}
+
+{% block body %}
+<h1>Tableau de bord statistique</h1>
+
+<h2>Statistiques globales des ventes</h2>
+<p>Chiffre d'affaires total : {{ ca_global }} MAD</p>
+
+<h2>Taux d’occupation des salles</h2>
+<table>
+    <tr><th>Salle</th><th>Taux</th></tr>
+    {% for row in occupation %}
+        {% set salle = row[0] %}
+        {% set taux = row.placesOccupees and row.capacite ? (row.placesOccupees / row.capacite * 100)|round(1) : 0 %}
+        <tr>
+            <td>{{ salle.nom }}</td>
+            <td>{{ taux }} %</td>
+        </tr>
+    {% else %}
+        <tr><td colspan="2">Aucune donnée pour l’instant.</td></tr>
+    {% endfor %}
+</table>
+
+<h2>Films les plus réservés</h2>
+<ul>
+    {% for row in top_films %}
+        {% set film = row.film %}
+        <li>{{ film.titre }} ({{ row.nbReservations }} réservations)</li>
+    {% else %}
+        <li>Aucun film pour l’instant.</li>
+    {% endfor %}
+</ul>
+
+<h2>Exports</h2>
+<p>
+    <a href="{{ path('app_admin_stat_pdf') }}">Exporter en PDF</a> |
+    <a href="{{ path('app_admin_stat_csv') }}">Exporter en Excel (CSV)</a>
+</p>
+{% endblock %}
