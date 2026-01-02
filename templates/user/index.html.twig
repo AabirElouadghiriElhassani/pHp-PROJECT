@@ -4,37 +4,38 @@
 {% block body %}
 <h1 class="mb-5">Users</h1>
 
-<div class="glass p-4">
-    <table class="table table-borderless text-light align-middle mb-0">
-        <thead class="muted">
+<div class="lux-card p-4">
+    <table class="table table-borderless text-light align-middle">
+        <thead class="text-secondary">
             <tr>
                 <th>ID</th>
                 <th>Email</th>
-                <th>Status</th>
+                <th>Role</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>01</td>
+                <td>1</td>
                 <td>admin@cinema.com</td>
-                <td><span class="badge bg-warning text-dark">Admin</span></td>
+                <td class="accent">ADMIN</td>
                 <td class="text-end">
-                    <a href="/users/1" class="btn-lux">Profile</a>
+                    <a href="/users/1" class="lux-btn">View</a>
                 </td>
             </tr>
             <tr>
-                <td>02</td>
+                <td>2</td>
                 <td>client@cinema.com</td>
-                <td class="muted">User</td>
+                <td>USER</td>
                 <td class="text-end">
-                    <a href="/users/2" class="btn-lux">Profile</a>
+                    <a href="/users/2" class="lux-btn">View</a>
                 </td>
             </tr>
         </tbody>
     </table>
 </div>
 {% endblock %}
+
 
 
 

@@ -14,11 +14,25 @@ class UserController extends AbstractController
         return $this->render('user/index.html.twig');
     }
 
-    #[Route('/users/{id}', name: 'user_show')]
+    #[Route('/users/{id}', name: 'user_show', requirements: ['id' => '\d+'])]
     public function show(int $id): Response
     {
         return $this->render('user/show.html.twig', [
-            'id' => $id
+            'userId' => $id,
         ]);
     }
+
+    #[Route('/dashboard', name: 'user_dashboard')]
+    public function dashboard(): Response
+    {
+        return $this->render('user/dashboard.html.twig');
+    }
+
+    #[Route('/profile', name: 'user_profile')]
+    public function profile(): Response
+    {
+        return $this->render('user/profile.html.twig');
+    }
 }
+
+

@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block body %}
+<div class="lux-card">
+    <h2 class="mb-4">My Profile</h2>
+
+    <div class="row">
+        <div class="col-md-6">
+            <p class="text-secondary mb-1">Full Name</p>
+            <p class="fs-5">John Doe</p>
+        </div>
+
+        <div class="col-md-6">
+            <p class="text-secondary mb-1">Email</p>
+            <p class="fs-5">johndoe@cinema.com</p>
+        </div>
+
+        <div class="col-md-6 mt-3">
+            <p class="text-secondary mb-1">Role</p>
+            <p class="fs-5">User</p>
+        </div>
+
+        <div class="col-md-6 mt-3">
+            <p class="text-secondary mb-1">Member Since</p>
+            <p class="fs-5">2025</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
