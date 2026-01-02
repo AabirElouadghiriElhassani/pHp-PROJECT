@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+{% block title %}User Profile{% endblock %}
+
+{% block body %}
+<a href="/users" class="muted text-decoration-none">← Back</a>
+
+<div class="glass p-5 mt-4">
+    <h2 class="mb-1">User Profile</h2>
+    <p class="muted mb-4">Account overview</p>
+
+    <div class="row">
+        <div class="col-md-6">
+            <p class="muted mb-1">User ID</p>
+            <p class="fs-5">{{ id }}</p>
+        </div>
+
+        <div class="col-md-6">
+            <p class="muted mb-1">Email</p>
+            <p class="fs-5">user{{ id }}@cinema.com</p>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <p class="muted mb-1">Subscription</p>
+        <span class="badge bg-success px-3 py-2">Premium</span>
+    </div>
+</div>
+{% endblock %}
+
+

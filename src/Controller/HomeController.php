@@ -6,12 +6,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class SecurityController extends AbstractController
+class HomeController extends AbstractController
 {
-    #[Route('/login', name: 'login')]
-    public function login(): Response
+    #[Route('/', name: 'home')]
+    public function index(): Response
     {
-        return $this->render('security/login.html.twig');
+        return $this->render('home/index.html.twig');
     }
 }
-

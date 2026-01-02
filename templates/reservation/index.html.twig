@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+{% block title %}Now Showing{% endblock %}
+
+{% block body %}
+<h1 class="mb-5">Now Showing</h1>
+
+<div class="row g-5">
+    <div class="col-md-4">
+        <div class="glass overflow-hidden">
+            <img src="https://image.tmdb.org/t/p/w500/6izwz7rsy95ARzTR3poZ8H6c5pp.jpg" class="img-fluid">
+            <div class="p-4">
+                <h5>Dune: Part Two</h5>
+                <p class="muted">IMAX · Dolby Atmos</p>
+                <a href="/reservations/1" class="btn-lux w-100">View Session</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

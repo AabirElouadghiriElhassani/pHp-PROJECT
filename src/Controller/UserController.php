@@ -3,26 +3,22 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 class UserController extends AbstractController
 {
-    #[Route('/dashboard', name: 'user_dashboard')]
-    public function dashboard()
+    #[Route('/users', name: 'user_index')]
+    public function index(): Response
     {
-        return $this->render('user/dashboard.html.twig');
+        return $this->render('user/index.html.twig');
     }
 
-    #[Route('/profile', name: 'user_profile')]
-    public function profile()
+    #[Route('/users/{id}', name: 'user_show')]
+    public function show(int $id): Response
     {
-        return $this->render('user/profile.html.twig');
-    }
-
-    #[Route('/user/reservations', name: 'user_reservations')]
-    public function reservations()
-    {
-        return $this->render('user/reservations.html.twig');
+        return $this->render('user/show.html.twig', [
+            'id' => $id
+        ]);
     }
 }
-

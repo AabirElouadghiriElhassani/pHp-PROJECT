@@ -8,22 +8,17 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ReservationController extends AbstractController
 {
-    #[Route('/reservations', name: 'app_reservation')]
-    public function index()
+    #[Route('/reservations', name: 'reservation_index')]
+    public function index(): Response
     {
-        return $this->render('/user/login/reservations.html.twig');
+        return $this->render('reservation/index.html.twig');
     }
 
-
-    #[Route('/reservation/new', name: 'reservation_create')]
-    public function create()
+    #[Route('/reservations/{id}', name: 'reservation_show')]
+    public function show(int $id): Response
     {
-        return $this->render('reservation/create.html.twig');
-    }
-
-    #[Route('/reservation/{id}', name: 'reservation_show')]
-    public function show()
-    {
-        return $this->render('reservation/show.html.twig');
+        return $this->render('reservation/show.html.twig', [
+            'id' => $id
+        ]);
     }
 }
