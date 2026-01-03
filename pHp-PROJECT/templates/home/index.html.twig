@@ -1,0 +1,348 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Galaxy Cinema{% endblock %}
+
+{% block body %}
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        background: radial-gradient(circle at top, #020617 0, #020617 40%, #000 100%);
+        color: #e5e7eb;
+    }
+    a { text-decoration: none; }
+
+    .hero {
+        position: relative;
+        min-height: 70vh;
+        padding: 40px 5% 80px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 40px;
+        overflow: hidden;
+    }
+    .hero::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 10% 0, rgba(56,189,248,0.25), transparent 60%),
+                    radial-gradient(circle at 90% 10%, rgba(251,113,133,0.18), transparent 60%);
+        opacity: .8;
+        pointer-events: none;
+    }
+    .hero-content, .hero-poster { position: relative; z-index: 1; }
+
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: rgba(15,23,42,0.85);
+        color: #a5b4fc;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: .12em;
+    }
+    .badge span {
+        width: 8px; height: 8px;
+        border-radius: 999px;
+        background: #22c55e;
+        box-shadow: 0 0 8px #22c55e;
+    }
+
+    .hero-title {
+        margin: 18px 0 12px;
+        font-size: 44px;
+        line-height: 1.1;
+        letter-spacing: .05em;
+        text-transform: uppercase;
+    }
+    .hero-title span {
+        color: #facc15;
+    }
+
+    .hero-sub {
+        max-width: 460px;
+        color: #9ca3af;
+        font-size: 15px;
+        margin-bottom: 24px;
+    }
+
+    .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 26px;
+    }
+    .btn-primary, .btn-outline {
+        border-radius: 999px;
+        padding: 10px 20px;
+        font-weight: 600;
+        font-size: 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        border: none;
+    }
+    .btn-primary {
+        background: linear-gradient(90deg, #f97316, #facc15);
+        color: #111827;
+        box-shadow: 0 15px 30px rgba(248,113,22,0.45);
+    }
+    .btn-primary:hover {
+        background: linear-gradient(90deg, #fdba74, #facc15);
+    }
+    .btn-outline {
+        background: transparent;
+        border: 1px solid #4b5563;
+        color: #e5e7eb;
+    }
+    .btn-outline:hover {
+        background: rgba(15,23,42,0.9);
+    }
+
+    .hero-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 18px;
+        font-size: 12px;
+        color: #9ca3af;
+    }
+    .hero-meta span { display: inline-flex; align-items: center; gap: 6px; }
+    .hero-meta strong { color: #e5e7eb; }
+
+    .hero-poster {
+        width: 360px;
+        max-width: 100%;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.9);
+        position: relative;
+    }
+    .hero-poster img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        filter: saturate(1.2);
+    }
+    .hero-poster::after {
+        content: 'Première ce soir';
+        position: absolute;
+        bottom: 16px;
+        left: 16px;
+        padding: 4px 10px;
+        background: rgba(15,23,42,0.85);
+        border-radius: 999px;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: .12em;
+    }
+
+    .section {
+        padding: 0 5% 50px;
+    }
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 18px;
+    }
+    .section-title {
+        font-size: 20px;
+        font-weight: 600;
+    }
+    .section-sub {
+        font-size: 13px;
+        color: #9ca3af;
+    }
+    .section-link {
+        font-size: 13px;
+        color: #a5b4fc;
+    }
+
+    .films-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 18px;
+    }
+    .film-card {
+        background: radial-gradient(circle at top, #111827, #020617 70%);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.65);
+        position: relative;
+    }
+    .film-poster {
+        height: 210px;
+        background-size: cover;
+        background-position: center;
+    }
+    .film-body {
+        padding: 10px 12px 12px;
+        font-size: 13px;
+    }
+    .film-title {
+        font-weight: 600;
+        margin-bottom: 4px;
+        color: #f9fafb;
+    }
+    .film-meta {
+        font-size: 11px;
+        color: #9ca3af;
+        margin-bottom: 8px;
+        display: flex;
+        justify-content: space-between;
+    }
+    .film-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .tag {
+        font-size: 10px;
+        padding: 2px 6px;
+        border-radius: 999px;
+        background: rgba(59,130,246,0.18);
+        color: #bfdbfe;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+    }
+    .film-price {
+        font-size: 12px;
+        color: #fbbf24;
+        font-weight: 600;
+    }
+
+    .cinema-footer {
+        padding: 24px 5% 18px;
+        border-top: 1px solid #111827;
+        font-size: 12px;
+        color: #6b7280;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    @media (max-width: 900px) {
+        .hero {
+            flex-direction: column;
+            align-items: flex-start;
+            padding-top: 24px;
+        }
+        .hero-poster {
+            align-self: center;
+            width: 80%;
+        }
+    }
+</style>
+
+<section class="hero">
+    <div class="hero-content">
+        <div class="badge">
+            <span></span> Nouvelle expérience cinéma en ligne
+        </div>
+
+        <h1 class="hero-title">
+            Galaxy <span>Cinema</span>
+        </h1>
+
+        <p class="hero-sub">
+            Réservez vos places en quelques clics, choisissez vos salles et profitez des meilleures séances,
+            sans file d’attente. Une plateforme pensée pour l’utilisateur, pilotée côté serveur.
+        </p>
+
+        <div class="hero-actions">
+            <a href="{{ path('app_films') }}" class="btn-primary">
+                Voir les films à l’affiche
+            </a>
+            <a href="{{ path('app_calendrier') }}" class="btn-outline">
+                Consulter le calendrier des séances
+            </a>
+        </div>
+
+        <div class="hero-meta">
+            <span><strong>Réservation instantanée</strong> • confirmation automatique</span>
+            <span><strong>Paiement simulé</strong> • projet académique sécurisé</span>
+        </div>
+    </div>
+
+    <div class="hero-poster">
+        <img src="https://images.pexels.com/photos/799137/pexels-photo-799137.jpeg?auto=compress&cs=tinysrgb&w=1200"
+             alt="Salle de cinéma">
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-header">
+        <div>
+            <div class="section-title">À l’affiche</div>
+            <div class="section-sub">Les films actuellement disponibles dans vos salles.</div>
+        </div>
+        <a href="{{ path('app_films') }}" class="section-link">Tous les films →</a>
+    </div>
+
+    <div class="films-grid">
+        {# Plus tard : boucle sur tes vrais films. Pour l’instant, quelques cartes statiques. #}
+        <div class="film-card">
+            <div class="film-poster"
+                 style="background-image:url('https://images.pexels.com/photos/799114/pexels-photo-799114.jpeg?auto=compress&cs=tinysrgb&w=800');">
+            </div>
+            <div class="film-body">
+                <div class="film-title">Midnight Odyssey</div>
+                <div class="film-meta">
+                    <span>Science-fiction • 2h10</span>
+                    <span>VOSTFR</span>
+                </div>
+                <div class="film-footer">
+                    <span class="tag">Avant-première</span>
+                    <span class="film-price">À partir de 60 MAD</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="film-card">
+            <div class="film-poster"
+                 style="background-image:url('https://images.pexels.com/photos/799160/pexels-photo-799160.jpeg?auto=compress&cs=tinysrgb&w=800');">
+            </div>
+            <div class="film-body">
+                <div class="film-title">City Lights</div>
+                <div class="film-meta">
+                    <span>Drame • 1h55</span>
+                    <span>VF</span>
+                </div>
+                <div class="film-footer">
+                    <span class="tag">En salle</span>
+                    <span class="film-price">À partir de 50 MAD</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="film-card">
+            <div class="film-poster"
+                 style="background-image:url('https://images.pexels.com/photos/799158/pexels-photo-799158.jpeg?auto=compress&cs=tinysrgb&w=800');">
+            </div>
+            <div class="film-body">
+                <div class="film-title">Neon Dreams</div>
+                <div class="film-meta">
+                    <span>Action • 2h05</span>
+                    <span>VOSTFR</span>
+                </div>
+                <div class="film-footer">
+                    <span class="tag">Dernières séances</span>
+                    <span class="film-price">À partir de 55 MAD</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="cinema-footer">
+    <span>© {{ "now"|date("Y") }} Galaxy Cinema. Projet Symfony de réservation de salles.</span>
+    <span>Admin : accès aux statistiques via /admin (ROLE_ADMIN_GENERAL).</span>
+</footer>
+{% endblock %}

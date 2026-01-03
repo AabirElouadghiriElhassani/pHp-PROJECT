@@ -1,0 +1,158 @@
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calendrier - Cinéma</title>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/locales/fr.js"></script>
+    <style>
+        body { 
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); 
+            color: white; 
+            font-family: 'Arial', sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            height: 100vh;
+        }
+        .container { max-width: 1400px; margin: 0 auto; height: 100%; }
+        .header { 
+            text-align: center; 
+            margin-bottom: 30px; 
+            padding: 20px 0;
+        }
+        .header h1 { 
+            font-size: 3.5em; 
+            margin: 0; 
+            text-shadow: 0 0 30px #ff6b35; 
+            animation: glow 2s ease-in-out infinite alternate; 
+        }
+        @keyframes glow { 
+            from { text-shadow: 0 0 20px #ff6b35; } 
+            to { text-shadow: 0 0 30px #ff6b35, 0 0 40px #ff6b35; } 
+        }
+        #calendar { 
+            background: rgba(255,255,255,0.1); 
+            border-radius: 25px; 
+            overflow: hidden; 
+            border: 1px solid rgba(255,107,53,0.3); 
+            backdrop-filter: blur(20px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+        .fc { 
+            color: white !important; 
+        }
+        .fc-col-header-cell-cushion { 
+            color: #ff6b35 !important; 
+            font-weight: bold; 
+            font-size: 1.1em;
+        }
+        .fc-daygrid-event { 
+            border: none !important; 
+            border-radius: 12px !important; 
+            margin: 2px !important; 
+            background: linear-gradient(45deg, #ff6b35, #f7931e) !important; 
+            font-weight: bold !important;
+        }
+        .fc-daygrid-event:hover { 
+            transform: scale(1.05) !important; 
+            box-shadow: 0 5px 15px rgba(255,107,53,0.6) !important;
+        }
+        .fc-event-title { 
+            font-size: 0.85em !important; 
+            white-space: normal !important; 
+            line-height: 1.2 !important;
+        }
+        .fc-toolbar-title { 
+            color: #ff6b35 !important; 
+            font-size: 2em !important; 
+            text-shadow: 0 0 20px #ff6b35;
+        }
+        .fc-button { 
+            background: linear-gradient(45deg, #ff6b35, #f7931e) !important; 
+            border: none !important; 
+            border-radius: 20px !important; 
+            color: white !important; 
+            margin: 0 5px !important;
+        }
+        .fc-button:hover { 
+            background: linear-gradient(45deg, #f7931e, #ff6b35) !important; 
+            transform: translateY(-2px) !important;
+        }
+        .fc-daygrid-day-number { 
+            color: white !important; 
+        }
+        .fc-day-today .fc-daygrid-day-number { 
+            color: #ff6b35 !important; 
+            font-weight: bold !important;
+        }
+        .legend { 
+            display: flex; 
+            justify-content: center; 
+            gap: 30px; 
+            margin-top: 20px; 
+            flex-wrap: wrap;
+        }
+        .legend-item { 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            font-size: 1.1em;
+        }
+        .legend-color { 
+            width: 30px; 
+            height: 20px; 
+            border-radius: 5px; 
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📅 CALENDRIER DES SÉANCES</h1>
+        </div>
+        
+        <div id="calendar"></div>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color"></div>
+                <span>Séances disponibles</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+                },
+                locale: 'fr',
+                events: {
+                    url: '{{ path('app_calendrier_load') }}',
+                    method: 'GET',
+                    failure: function() {
+                        console.log('Erreur chargement événements');
+                    }
+                },
+                eventClick: function(info) {
+                    alert('Séance: ' + info.event.title + '\nCliquez pour réserver !');
+                    // window.location.href = info.event.extendedProps.url;
+                },
+                height: 'auto',
+                eventDisplay: 'block',
+                dayMaxEvents: 3
+            });
+            calendar.render();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Salles - Cinéma</title>
+    <style>
+        body { 
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); 
+            color: white; 
+            font-family: 'Arial', sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header { 
+            text-align: center; 
+            margin-bottom: 40px; 
+            position: relative;
+        }
+        .header h1 { 
+            font-size: 3.5em; 
+            margin: 0; 
+            text-shadow: 0 0 30px #00d4ff; 
+            animation: glow 2s ease-in-out infinite alternate; 
+        }
+        @keyframes glow { 
+            from { text-shadow: 0 0 20px #00d4ff; } 
+            to { text-shadow: 0 0 30px #00d4ff, 0 0 40px #00d4ff; } 
+        }
+        .salles-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); 
+            gap: 30px; 
+        }
+        .salle-card { 
+            background: rgba(255,255,255,0.1); 
+            border-radius: 25px; 
+            overflow: hidden; 
+            transition: all 0.4s; 
+            border: 1px solid rgba(0,212,255,0.3); 
+            backdrop-filter: blur(10px); 
+            position: relative;
+            height: 450px;
+        }
+        .salle-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #00d4ff, #0099cc, #00d4ff);
+            animation: slide 3s infinite;
+        }
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        .salle-card:hover { 
+            transform: translateY(-15px) scale(1.02); 
+            box-shadow: 0 25px 50px rgba(0,212,255,0.4); 
+        }
+        .salle-icon { 
+            height: 120px; 
+            width: 120px; 
+            margin: 30px auto; 
+            background: linear-gradient(45deg, #00d4ff, #0099cc); 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 3em; 
+            box-shadow: 0 15px 30px rgba(0,212,255,0.4);
+        }
+        .salle-info { 
+            padding: 30px; 
+            text-align: center; 
+        }
+        .salle-nom { 
+            font-size: 2em; 
+            margin: 0 0 15px; 
+            color: #00d4ff; 
+            font-weight: bold; 
+        }
+        .stats { 
+            display: flex; 
+            justify-content: space-around; 
+            margin: 20px 0; 
+            background: rgba(0,212,255,0.1); 
+            padding: 20px; 
+            border-radius: 15px; 
+        }
+        .stat { text-align: center; }
+        .stat-number { font-size: 2.5em; color: #00d4ff; font-weight: bold; }
+        .stat-label { font-size: 0.9em; opacity: 0.8; }
+        .occupation-bar { 
+            background: rgba(255,255,255,0.2); 
+            height: 12px; 
+            border-radius: 6px; 
+            overflow: hidden; 
+            margin: 20px 0; 
+        }
+        .occupation-fill { 
+            height: 100%; 
+            background: linear-gradient(90deg, #ff6b35, #f7931e); 
+            transition: width 2s ease; 
+        }
+        .btn-details { 
+            background: linear-gradient(45deg, #00d4ff, #0099cc); 
+            color: white; 
+            padding: 15px 30px; 
+            text-decoration: none; 
+            border-radius: 30px; 
+            display: inline-block; 
+            font-weight: bold; 
+            transition: all 0.3s; 
+            box-shadow: 0 10px 20px rgba(0,212,255,0.3); 
+        }
+        .btn-details:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 15px 30px rgba(0,212,255,0.5); 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎭 NOS SALLES</h1>
+        </div>
+
+        <div class="salles-grid">
+            {% for salle in salles %}
+            <div class="salle-card">
+                <div class="salle-icon">🎥</div>
+                <div class="salle-info">
+                    <h2 class="salle-nom">{{ salle.nom }}</h2>
+                    
+                    <div class="stats">
+                        <div class="stat">
+                            <div class="stat-number">{{ salle.capacite }}</div>
+                            <div class="stat-label">Places totales</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">{{ salle.occupation }}</div>
+                            <div class="stat-label">Occupé</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">{{ salle.capacite - salle.occupation }}</div>
+                            <div class="stat-label">Disponible</div>
+                        </div>
+                    </div>
+
+                    <div class="occupation-bar">
+                        <div class="occupation-fill" style="width: {{ (salle.occupation / salle.capacite * 100) }}%"></div>
+                    </div>
+
+                    <a href="{{ path('app_salle_show', {'id': salle.id}) }}" class="btn-details">
+                        DÉTAILS & SÉANCES →
+                    </a>
+                </div>
+            </div>
+            {% else %}
+            <div style="grid-column: 1/-1; text-align: center; padding: 50px;">
+                <h2 style="color: #00d4ff;">Aucune salle disponible 😔</h2>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

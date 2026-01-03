@@ -1,0 +1,265 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement - Cinéma{% endblock %}
+
+{% block body %}
+<style>
+    body {
+        background: radial-gradient(circle at top, #1b2735 0, #090a0f 60%, #000 100%);
+        color: #f5f5f5;
+        font-family: 'Segoe UI', sans-serif;
+    }
+    .cinema-header {
+        text-align: center;
+        padding: 40px 0 20px;
+    }
+    .cinema-header h1 {
+        font-size: 36px;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: #facc15;
+    }
+    .cinema-header p {
+        color: #d1d5db;
+    }
+    .payment-container {
+        max-width: 900px;
+        margin: 0 auto 60px;
+        background: rgba(15, 23, 42, 0.92);
+        border-radius: 16px;
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+        display: grid;
+        grid-template-columns: 3fr 2fr;
+        overflow: hidden;
+    }
+    .payment-details {
+        padding: 30px 40px;
+    }
+    .payment-details h2 {
+        font-size: 24px;
+        margin-bottom: 10px;
+        color: #e5e7eb;
+    }
+    .session-info {
+        font-size: 14px;
+        color: #9ca3af;
+        margin-bottom: 20px;
+    }
+    .session-info span {
+        display: inline-block;
+        margin-right: 15px;
+    }
+    .ticket-box {
+        background: rgba(15, 118, 110, 0.1);
+        border: 1px dashed #0d9488;
+        border-radius: 12px;
+        padding: 15px 18px;
+        margin-bottom: 25px;
+    }
+    .ticket-box strong {
+        color: #22c55e;
+    }
+    .form-group-inline {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 12px;
+    }
+    .form-group {
+        margin-bottom: 12px;
+    }
+    label {
+        font-size: 13px;
+        color: #9ca3af;
+        margin-bottom: 4px;
+        display: block;
+    }
+    input[type="text"],
+    input[type="number"] {
+        width: 100%;
+        padding: 9px 12px;
+        border-radius: 8px;
+        border: 1px solid #374151;
+        background: #020617;
+        color: #f9fafb;
+        font-size: 13px;
+    }
+    input::placeholder {
+        color: #6b7280;
+    }
+    .payment-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 18px;
+    }
+    .btn-pay,
+    .btn-fail {
+        flex: 1;
+        border-radius: 999px;
+        border: none;
+        padding: 10px 0;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+    }
+    .btn-pay {
+        background: linear-gradient(90deg, #22c55e, #16a34a);
+        color: #022c22;
+    }
+    .btn-pay:hover {
+        background: linear-gradient(90deg, #4ade80, #16a34a);
+    }
+    .btn-fail {
+        background: transparent;
+        border: 1px solid #f97316;
+        color: #fed7aa;
+    }
+    .btn-fail:hover {
+        background: rgba(248, 113, 113, 0.1);
+    }
+    .payment-summary {
+        background: linear-gradient(160deg, #111827, #020617 60%, #1f2937);
+        padding: 30px 24px;
+        border-left: 1px solid #111827;
+        position: relative;
+    }
+    .poster {
+        width: 100%;
+        height: 220px;
+        border-radius: 12px;
+        background-size: cover;
+        background-position: center;
+        margin-bottom: 18px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    }
+    .movie-title {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+    .movie-meta {
+        font-size: 13px;
+        color: #9ca3af;
+        margin-bottom: 16px;
+    }
+    .price-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        margin-bottom: 4px;
+    }
+    .price-row.total {
+        margin-top: 10px;
+        font-weight: 700;
+        font-size: 16px;
+        color: #e5e7eb;
+    }
+    .secure-note {
+        font-size: 11px;
+        color: #6b7280;
+        margin-top: 14px;
+    }
+
+    @media (max-width: 900px) {
+        .payment-container {
+            grid-template-columns: 1fr;
+        }
+        .payment-summary {
+            border-left: none;
+            border-top: 1px solid #111827;
+        }
+    }
+</style>
+
+{% set creneau = reservation.creneau ?? null %}
+{% set film    = creneau ? creneau.film ?? null : null %}
+{% set salle   = creneau ? creneau.salle ?? null : null %}
+{% set nbPlaces = reservation.nombrePlaces ?? reservation.nombre_places ?? 1 %}
+{% set prixUnitaire = 60 %} {# par exemple, 60 MAD la place #}
+{% set total = nbPlaces * prixUnitaire %}
+
+<div class="cinema-header">
+    <h1>Galaxy<span style="color:#22c55e">Cinema</span></h1>
+    <p>Finalisez votre paiement pour confirmer votre séance.</p>
+</div>
+
+<div class="payment-container">
+    <div class="payment-details">
+        <h2>Paiement sécurisé</h2>
+        <p class="session-info">
+            <span>Salle : <strong>{{ salle ? salle.nom : 'Salle' }}</strong></span>
+            <span>Film : <strong>{{ film ? film.titre : 'Film' }}</strong></span>
+            <span>Horaire :
+                <strong>{{ creneau ? creneau.dateHeure|date('d/m H:i') : reservation.dateCreation|date('d/m H:i') }}</strong>
+            </span>
+        </p>
+
+        <div class="ticket-box">
+            Vous êtes sur le point de payer
+            <strong>{{ total }} MAD</strong>
+            pour
+            <strong>{{ nbPlaces }} place(s)</strong>.
+        </div>
+
+        <form method="post">
+            <div class="form-group">
+                <label>Nom sur la carte</label>
+                <input type="text" name="card_name" placeholder="Prénom Nom">
+            </div>
+
+            <div class="form-group">
+                <label>Numéro de carte</label>
+                <input type="text" name="card_number" placeholder="XXXX XXXX XXXX XXXX">
+            </div>
+
+            <div class="form-group-inline">
+                <div class="form-group">
+                    <label>Expiration</label>
+                    <input type="text" name="exp" placeholder="MM/AA">
+                </div>
+                <div class="form-group">
+                    <label>Crypto</label>
+                    <input type="number" name="cvc" placeholder="123">
+                </div>
+            </div>
+
+            <div class="payment-actions">
+                <button type="submit" name="action" value="success" class="btn-pay">
+                    Payer {{ total }} MAD
+                </button>
+                <button type="submit" name="action" value="fail" class="btn-fail">
+                    Simuler un échec
+                </button>
+            </div>
+
+            <p class="secure-note">
+                Paiement simulé pour le projet : aucune vraie carte bancaire n’est utilisée.
+            </p>
+        </form>
+    </div>
+
+    <div class="payment-summary">
+        <div class="poster"
+             style="background-image: url('https://images.pexels.com/photos/799114/pexels-photo-799114.jpeg?auto=compress&cs=tinysrgb&w=800');">
+        </div>
+
+        <div class="movie-title">{{ film ? film.titre : 'Film mystère' }}</div>
+        <div class="movie-meta">
+            {{ film ? (film.genre ?? 'Genre') : 'Genre' }}
+            • {{ film ? (film.duree ?? 120) : 120 }} min
+        </div>
+
+        <div class="price-row">
+            <span>Prix unitaire</span>
+            <span>{{ prixUnitaire }} MAD</span>
+        </div>
+        <div class="price-row">
+            <span>Nombre de places</span>
+            <span>{{ nbPlaces }}</span>
+        </div>
+        <div class="price-row total">
+            <span>Total à payer</span>
+            <span>{{ total }} MAD</span>
+        </div>
+    </div>
+</div>
+{% endblock %}
