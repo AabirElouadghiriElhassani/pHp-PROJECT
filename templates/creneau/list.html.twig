@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+{% block title %}Créneaux{% endblock %}
+
+{% block body %}
+<h1>Créneaux</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Film</th>
+            <th>Salle</th>
+            <th>Début</th>
+            <th>Fin</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in creneaux %}
+            <tr>
+                <td>{{ c.film.titre }}</td>
+                <td>{{ c.salle.nom }}</td>
+                <td>{{ c.dateHeureDebut|date('d/m/Y H:i') }}</td>
+                <td>{{ c.dateHeureFin|date('d/m/Y H:i') }}</td>
+                <td>
+                    <form action="{{ path('app_reservation', {id: c.id}) }}" method="post">
+                        <input type="number" name="places" value="1" min="1">
+                        <button class="btn btn-primary">Réserver</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
